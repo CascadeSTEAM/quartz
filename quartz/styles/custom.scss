@@ -1,3 +1,17 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+.custom-block-container {
+  // ... (previous styles)
+
+  .custom-block-timestamp {
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--gray);
+    font-size: 0.75rem;
+    color: var(--gray);
+    font-family: var(--codeFont);
+    font-style: italic;
+  }
+}
+

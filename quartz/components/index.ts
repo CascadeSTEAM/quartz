@@ -23,7 +23,9 @@ import Breadcrumbs from "./Breadcrumbs"
 import Comments from "./Comments"
 import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
-import CustomBlock from "./CustomBlock"
+import DocumentContent from "./DocumentContent"
+import CSFooter from "./CSFooter"
+import Logo from "./Logo"
 
 export {
   ArticleTitle,
@@ -32,7 +34,9 @@ export {
   FolderContent,
   Darkmode,
   ReaderMode,
-  CustomBlock,
+  Logo,
+  DocumentContent,
+  CSFooter,
   Head,
   PageTitle,
   ContentMeta,

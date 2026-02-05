@@ -15,3 +15,23 @@
   }
 }
 
+.volunteer-footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-top: 1px dashed var(--lightgray);
+
+  p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .donate-button {
+    margin-top: 10px;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}

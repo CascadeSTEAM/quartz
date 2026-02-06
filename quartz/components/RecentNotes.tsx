@@ -42,37 +42,26 @@ export default ((userOpts?: Partial<Options>) => {
           {pages.slice(0, opts.limit).map((page) => {
             const title = page.frontmatter?.title ?? i18n(cfg.locale).propertyDefaults.title
             const tags = page.frontmatter?.tags ?? []
-
             return (
               <li class="recent-li">
-                <div class="section">
-                  <div class="desc">
-                    <h3>
-                      <a href={resolveRelative(fileData.slug!, page.slug!)} class="internal">
-                        {title}
+                {page.dates && (
+                    <Date date={getDate(cfg, page)!} locale={cfg.locale} />
+                )} - 
+                <a href={resolveRelative(fileData.slug!, page.slug!)} class="internal">
+                  {title}
+                </a>
+                {opts.showTags && (
+                  <span class="recent-tags">
+                    {tags.map((tag) => (
+                      <a
+                        class="internal tag-link"
+                        href={resolveRelative(fileData.slug!, `tags/${tag}` as FullSlug)}
+                      >
+                        {tag}
                       </a>
-                    </h3>
-                  </div>
-                  {page.dates && (
-                    <p class="meta">
-                      <Date date={getDate(cfg, page)!} locale={cfg.locale} />
-                    </p>
-                  )}
-                  {opts.showTags && (
-                    <ul class="tags">
-                      {tags.map((tag) => (
-                        <li>
-                          <a
-                            class="internal tag-link"
-                            href={resolveRelative(fileData.slug!, `tags/${tag}` as FullSlug)}
-                          >
-                            {tag}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                    ))}
+                  </span>
+                )}
               </li>
             )
           })}

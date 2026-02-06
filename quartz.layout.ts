@@ -1,5 +1,6 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
+import { jsx } from "preact/jsx-runtime" // Add this import at the top
 
 
 // components shared across all pages
@@ -10,7 +11,24 @@ export const sharedPageComponents: SharedLayout = {
       targetSlug: "assets/fragments/global-header", 
     }),
   ],
-  afterBody: [Component.DocumentContent({targetSlug: "assets/fragments/global-footer", })],
+  afterBody: [
+    Component.ConditionalRender({
+      // component: Component.RecentNotes({limit: 5, showTags: true,}),
+      component: Component.RecentNotes({
+        title: "Recent Notes",
+        limit: 5,
+        // Custom filter function
+        filter: (f) => {
+          // Exclude paths starting with assets/ or templates/
+          return !(f.slug?.startsWith("assets/") || f.slug?.startsWith("templates/"))
+        },
+        // Optionally, ignore specific file extensions
+        // filter: (f) => !f.slug?.endsWith(".excalidraw"), 
+      }),
+      condition: (page) => page.fileData.slug == "index",
+    }),
+    Component.DocumentContent({targetSlug: "assets/fragments/global-footer", }),
+  ],
   footer: Component.CSFooter(),
 }
 
@@ -21,12 +39,21 @@ export const defaultContentPageLayout: PageLayout = {
       component: Component.Breadcrumbs({showCurrentPage: false,}),
       condition: (page) => page.fileData.slug !== "index",
     }),
-    Component.ArticleTitle(),
-    Component.ContentMeta(),
+    Component.ConditionalRender({
+      component: Component.ArticleTitle(),
+      condition: (page) => page.fileData.frontmatter?.layout !== "landing-page",
+    }),
+    Component.ConditionalRender({
+      component: Component.ContentMeta(),
+      condition: (page) => page.fileData.frontmatter?.layout !== "landing-page",
+    }),
     Component.TagList(),
   ],
   left: [
-    Component.Logo(),
+    Component.ConditionalRender({
+      component: Component.Logo(),
+      condition: (page) => page.fileData.frontmatter?.layout !== "landing-page",
+    }),
     Component.MobileOnly(Component.Spacer()),
     Component.Flex({
       components: [
@@ -41,10 +68,18 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Explorer(),
   ],
   right: [
-    Component.DesktopOnly(Component.Graph()),
-    Component.DesktopOnly(Component.TableOfContents()),
-    Component.DesktopOnly(Component.Backlinks()),
-    Component.DesktopOnly(Component.RecentNotes()),
+    Component.DesktopOnly((props) => {
+      const isLandingPage = props.fileData.frontmatter?.layout === "landing-page"
+      if (isLandingPage) return null
+
+      return jsx(props.displayClass ?? "div", {
+        children: [
+          Component.Graph()(props),
+          Component.TableOfContents()(props),
+          Component.Backlinks()(props),
+        ],
+      })
+    }),
   ],
 }
 
@@ -75,8 +110,7 @@ export const defaultListPageLayout: PageLayout = {
   ],
   right: [
     Component.Graph(),
-    Component.DesktopOnly(Component.TableOfContents()),
-    Component.DesktopOnly(Component.Backlinks()),
-    Component.DesktopOnly(Component.RecentNotes()),
+    Component.TableOfContents(),
+    Component.Backlinks(),
   ],
 }

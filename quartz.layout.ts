@@ -65,7 +65,18 @@ export const defaultContentPageLayout: PageLayout = {
         { Component: Component.ReaderMode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer({
+      title: "Directory",
+      // folderClickBehavior: "collapse",
+      // Add the filter function here
+      filterFn: (node) => {
+        // List folders or files you want to hide
+        const omit = new Set(["assets"])
+        
+        // Check against the node's display name or slug
+        return !omit.has(node.displayName.toLowerCase())
+      },
+    })
   ],
   right: [
     Component.DesktopOnly((props) => {

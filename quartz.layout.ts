@@ -47,7 +47,10 @@ export const defaultContentPageLayout: PageLayout = {
       component: Component.ContentMeta(),
       condition: (page) => page.fileData.frontmatter?.layout !== "landing-page",
     }),
-    Component.TagList(),
+    Component.ConditionalRender({
+      component: Component.TagList(),
+      condition: (page) => page.fileData.frontmatter?.layout !== "landing-page",
+    }),    
   ],
   left: [
     Component.ConditionalRender({
@@ -81,8 +84,11 @@ export const defaultContentPageLayout: PageLayout = {
   right: [
     Component.DesktopOnly((props) => {
       const isLandingPage = props.fileData.frontmatter?.layout === "landing-page"
+
+      // If it's a landing page, we don't want to show the graph, backlinks, or table of contents, so we return null to render nothing.
       if (isLandingPage) return null
 
+      // For all other pages, we render the graph, backlinks, and table of contents in the right sidebar.
       return jsx(props.displayClass ?? "div", {
         children: [
           Component.Graph()(props),
@@ -103,7 +109,6 @@ export const defaultListPageLayout: PageLayout = {
     }),
     Component.ArticleTitle(),
     Component.ContentMeta(),
-    Component.TagList(),
   ],
   left: [
     Component.Logo(),

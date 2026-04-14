@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Obsidian/CascadeSTEAM"
+		}
+	],
+	"settings": {
+		"codeQL.createQuery.qlPackLocation": "/home/netyeti/Projects/quartz"
+	}
+}
